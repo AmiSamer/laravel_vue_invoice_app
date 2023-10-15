@@ -1,13 +1,14 @@
+
 <template>
     <div class="container">
         <div class="invoices">
         
         <div class="card__header">
             <div>
-                <h2 class="invoice__title">Invoices mine</h2>
+                <h2 class="invoice__title">Invoices</h2>
             </div>
             <div>
-                <a class="btn btn-secondary">
+                <a class="btn btn-secondary" @click="add_invoice()">
                     New Invoice
                 </a>
             </div>
@@ -88,12 +89,15 @@ const getInvoices = async() =>{
     console.log('response',response)
 }
 </script> -->
-
 <script>
+
+import router from '../../router/index.js'
 
 export default {
 
     name : "invoice list",
+
+    // components : {router},
     data : function(){
         return {
             loading : false,
@@ -130,10 +134,23 @@ export default {
                 }else{
                     location.reload();
                 }           
+                 },
+
+        add_invoice : async function(){
+
+                    // let invoice_form = await axios.get('/invoice_app/api/create_invoice');
+                    // console.log('my_form_data',invoice_form.data);                 
+                        router.push("/invoice_app/invoice/new");
+                   
+
+                    
+
+                    
+
                  }
              }
 } 
 
-
 </script>
+
 
