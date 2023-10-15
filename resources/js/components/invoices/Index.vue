@@ -4,7 +4,7 @@
         
         <div class="card__header">
             <div>
-                <h2 class="invoice__title">Invoices</h2>
+                <h2 class="invoice__title">Invoices mine</h2>
             </div>
             <div>
                 <a class="btn btn-secondary">
