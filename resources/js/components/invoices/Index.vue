@@ -97,7 +97,6 @@ export default {
 
     name : "invoice list",
 
-    // components : {router},
     data : function(){
         return {
             loading : false,
@@ -138,14 +137,10 @@ export default {
 
         add_invoice : async function(){
 
-                    // let invoice_form = await axios.get('/invoice_app/api/create_invoice');
-                    // console.log('my_form_data',invoice_form.data);                 
+                    let invoice_form = await axios.get('/invoice_app/api/add_invoice');
+                    console.log('my_form_data',invoice_form.data);                 
                         router.push("/invoice_app/invoice/new");
-                   
-
-                    
-
-                    
+                                   
 
                  }
              }

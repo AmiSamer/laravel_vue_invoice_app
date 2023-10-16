@@ -32,7 +32,7 @@ class InvoiceController extends Controller
         }
     }
 
-    public function add_invoice(Request $request){
+    public function add_invoice(){
 
         $counter = Counter::where('key','invoice')->first();
         $random = Counter::where('key','invoice')->first();
@@ -70,4 +70,6 @@ class InvoiceController extends Controller
             return response()->json($formData);
 
     }
+
+   
 }
