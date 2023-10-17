@@ -45,7 +45,7 @@
                 </div>
     
                 <!-- item 1 -->
-                <div class="table--items2" v-for="cart_product in cart_list" :key="cart_product.id">
+                <div class="table--items2" v-for="(cart_product,i) in cart_list" :key="cart_product.id">
                     <p>#{{ cart_product.item_code }}{{ cart_product.description }}</p>
                     <p>
                         <input type="text" class="input" v-model="cart_product.unit_price">
@@ -57,7 +57,7 @@
                         $ {{ (cart_product.quantity)*(cart_product.unit_price) }}
                     </p>
                     <p v-else></p>
-                    <p style="color: red; font-size: 24px;cursor: pointer;">
+                    <p style="color: red; font-size: 24px;cursor: pointer;" @click="removeItem(i)">
                         &times;
                     </p>
                 </div>
@@ -69,20 +69,20 @@
             <div class="table__footer">
                 <div class="document-footer" >
                     <p>Terms and Conditions</p>
-                    <textarea cols="50" rows="7" class="textarea" ></textarea>
+                    <textarea cols="50" rows="7" class="textarea" v-model="form.terms_and_conditions"></textarea>
                 </div>
                 <div>
                     <div class="table__footer--subtotal">
                         <p>Sub Total</p>
-                        <span>$ 1000</span>
+                        <span>$ {{ subTotal() }}</span>
                     </div>
                     <div class="table__footer--discount">
                         <p>Discount</p>
-                        <input type="text" class="input">
+                        <input type="text" class="input" v-model="form.discount">
                     </div>
                     <div class="table__footer--total">
                         <p>Grand Total</p>
-                        <span>$ 1200</span>
+                        <span>$ {{ total() }}</span>
                     </div>
                 </div>
             </div>
@@ -94,7 +94,7 @@
                 
             </div>
             <div>
-                <a class="btn btn-secondary">
+                <a class="btn btn-secondary" @click="onSave()">
                     Save
                 </a>
             </div>
@@ -109,10 +109,19 @@
             <h3 class="modal__title">Add Item</h3>
             <hr><br>
             <div class="modal__items">
-                <select class="input my-1">
-                    <option value="None">None</option>
-                    <option value="None">LBC Padala</option>
-                </select>
+                
+                <ul style="list-style: none;">
+                    <li v-for="(item,i) in product_list" :key="product_list.id" style="display: grid;
+                grid-template-columns: 30px 350px 15px;
+                align-items: center;padding-bottom: 5px;">
+                <p>{{ i+1 }}</p>
+                 <a href="#">{{ item.item_code }} {{ item.description }}</a>
+                 <button @click="addCart(item)" style="border: 1px solid #e0e0e0;width: 35px;height: 35px;cursor: pointer;" >
+                    +
+                 </button>
+                </li>
+                </ul>
+                
             </div>
             <br><hr>
             <div class="model__footer">
@@ -133,6 +142,7 @@
 <script setup>
 
 import { onMounted, ref } from 'vue';
+import { useRouter } from 'vue-router';
 
 let form = ref([])
 let all_customers = ref([])
@@ -142,6 +152,7 @@ let cart_list = ref([])
 let product_list = ref([])
 const show_modal = ref(false)
 const hide_modal = ref(true)
+const router = useRouter()
 
 
 
@@ -175,6 +186,55 @@ const addCart = (item) => {
 
     }
     cart_list.value.push(cart_item);
+    closeModal();
+}
+
+const removeItem = (i) => {
+
+    cart_list.value.splice(i,1);
+
+}
+
+
+const subTotal = () => {
+    let total = 0
+    cart_list.value.map((data)=>{
+        total = total+(data.quantity*data.unit_price)
+    })
+
+    return total
+}
+
+const total = () => {
+    return subTotal() - form.value.discount
+}
+
+const onSave = () => {
+
+    let sub_total = 0
+    sub_total = subTotal()
+
+    let total_cost = 0
+    total_cost = total()
+
+    const myForm = new FormData()
+    myForm.append('invoice_item',JSON.stringify(cart_list.value))
+    myForm.append('customer_id',customer_id.value)
+    myForm.append('date',form.value.date)
+    myForm.append('due_date',form.value.due_date)
+    myForm.append('number',form.value.number)
+    myForm.append('reference',form.value.reference)
+    myForm.append('discount',form.value.discount)
+    myForm.append('sub_total',sub_total)
+    myForm.append('total',total_cost)
+    myForm.append('terms_and_conditions',form.value.terms_and_conditions)
+
+     axios.post("/invoice_app/api/save_invoice",myForm)
+    cart_list.value = []
+    router.push("/invoice_app/");
+
+
+    
 }
 
 const openModal = () => {
@@ -190,6 +250,7 @@ const get_all_products = async() => {
 
     let response = await axios.get("/invoice_app/api/products")
     console.log('all_product_list',response);
+    product_list.value = response.data.products;
 }
 
 </script>
