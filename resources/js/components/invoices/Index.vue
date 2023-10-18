@@ -58,7 +58,7 @@
 
             <!-- item 1 -->
             <div class="table--items" v-for="item in invoices" :key="item.id" v-if="invoices.length > 0">
-                <a href="#" class="table--items--transactionId">{{ item.id }}</a>
+                <a href="#" @click="show_invoice(item.id)" class="table--items--transactionId">{{ item.id }}</a>
                 <p>{{ item.date }}</p>
                 <p>{{ item.number }}</p>
                 <p v-if="item.customer">{{ item.customer.first_name }}</p>
@@ -142,7 +142,11 @@ export default {
                         router.push("/invoice_app/invoice/new");
                                    
 
-                 }
+                 },
+
+          show_invoice : async function(id){
+                     router.push("/invoice_app/invoice/show/"+id);
+                 }       
              }
 } 
 

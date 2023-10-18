@@ -229,7 +229,7 @@ const onSave = () => {
     myForm.append('total',total_cost)
     myForm.append('terms_and_conditions',form.value.terms_and_conditions)
 
-     axios.post("/invoice_app/api/save_invoice",myForm)
+    axios.post("/invoice_app/api/save_invoice",myForm)
     cart_list.value = []
     router.push("/invoice_app/");
 
@@ -252,6 +252,9 @@ const get_all_products = async() => {
     console.log('all_product_list',response);
     product_list.value = response.data.products;
 }
+
+
+
 
 </script>
 
