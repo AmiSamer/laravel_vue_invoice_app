@@ -5,7 +5,7 @@
         
         <div class="card__header">
             <div>
-                <h2 class="invoice__title">Invoices ssss</h2>
+                <h2 class="invoice__title">Invoices</h2>
             </div>
             <div>
                 <a class="btn btn-secondary" @click="add_invoice()">

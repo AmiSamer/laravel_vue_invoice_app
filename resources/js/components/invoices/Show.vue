@@ -28,7 +28,7 @@
                     </li>
                     <li>
                         <!-- Select Btn Option -->
-                        <button class="selectBtnFlat">
+                        <button class="selectBtnFlat" @click="onEdit(form.id)">
                             <i class=" fas fa-reply"></i>
                             Edit
                         </button>
@@ -36,7 +36,7 @@
                     </li>
                     <li>
                         <!-- Select Btn Option -->
-                        <button class="selectBtnFlat ">
+                        <button class="selectBtnFlat" @click="onDelete(form.id)">
                             <i class=" fas fa-pencil-alt"></i>
                             Delete
                         </button>
@@ -151,8 +151,11 @@
 <script setup>
 import axios from "axios";
 import { onMounted, ref } from "vue"
+import { useRouter } from 'vue-router';
 
 let form = ref({ id : '' })
+
+const router = useRouter()
 
 
 const props = defineProps({
@@ -177,4 +180,18 @@ const print_invoice = () => {
     window.print()
     router.push('/invoice_app/').catch( () => {} )
 }
+
+const onEdit = (id) => {
+    
+    router.push('/invoice_app/edit/'+id)
+}
+
+const onDelete = (id) => {
+
+
+ let response = axios.get('/invoice_app/api/delete_invoice/'+id)
+    router.push('/invoice_app/')
+   
+}
+
 </script>
